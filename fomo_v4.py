@@ -209,6 +209,25 @@ with tab1:
             for k,v in rows: html+=f'<div class="row"><span class="rk">{k}</span><span class="rv">{v}</span></div>'
             html+='</div>'
             st.markdown(html,unsafe_allow_html=True)
+
+        st.markdown('<div style="height:10px;"></div>',unsafe_allow_html=True)
+        st.markdown('<div style="font-size:.58rem;font-weight:700;color:#3D5A7A;text-transform:uppercase;letter-spacing:.15em;margin:14px 0 8px 0;padding-bottom:5px;border-bottom:1px solid #0C1F35;">What Happened Next — Historical Outcomes for Similar Events</div>',unsafe_allow_html=True)
+        same_bias_events = [e for e in EVENTS if e["bias"] == ev["bias"] and e.get("rev")]
+        if same_bias_events:
+            avg_rev = int(sum(e["rev"] for e in same_bias_events) / len(same_bias_events))
+            reversion_prob = int(len(same_bias_events) / len([e for e in EVENTS if e["bias"] == ev["bias"]]) * 100)
+            avg_peak = sum(abs(e["peak"]) for e in same_bias_events) / len(same_bias_events)
+            avg_score = int(sum(e["score"] for e in same_bias_events) / len(same_bias_events))
+            w1,w2,w3,w4 = st.columns(4)
+            with w1:
+                st.markdown(f'<div class="kpi"><div class="kpi-val" style="color:#34D399;">{avg_rev}d</div><div class="kpi-lbl">Avg reversion time</div></div>',unsafe_allow_html=True)
+            with w2:
+                st.markdown(f'<div class="kpi"><div class="kpi-val" style="color:#F87171;">{reversion_prob}%</div><div class="kpi-lbl">Reversion probability</div></div>',unsafe_allow_html=True)
+            with w3:
+                st.markdown(f'<div class="kpi"><div class="kpi-val" style="color:#FCD34D;">{avg_peak:.1f}%</div><div class="kpi-lbl">Avg peak CAR (similar events)</div></div>',unsafe_allow_html=True)
+            with w4:
+                st.markdown(f'<div class="kpi"><div class="kpi-val" style="color:#A78BFA;">{avg_score}</div><div class="kpi-lbl">Avg FOMO score (similar)</div></div>',unsafe_allow_html=True)
+            st.markdown(f'<div class="panel"><div class="row"><span class="rk">Based on</span><span class="rv">{len([e for e in EVENTS if e["bias"] == ev["bias"]])} historical {ev["bias"]} events in database (2004-2026)</span></div><div class="row"><span class="rk">Reversion probability</span><span class="rv">{reversion_prob}% of {ev["bias"]} events showed clear mean reversion within {avg_rev} trading days on average</span></div><div class="row"><span class="rk">What this means</span><span class="rv">{"High probability of mean reversion. The irrational premium historically corrects within " + str(avg_rev) + " trading days. Rational investors who held through the " + ev["bias"].lower() + " event were rewarded." if ev["score"] >= 65 else "Moderate behavioral distortion. Monitor for stabilization signals before drawing conclusions about direction." if ev["score"] >= 35 else "Low behavioral distortion. Market absorbed this event relatively rationally — less clear reversion signal."}</span></div><div class="row"><span class="rk">Selection criteria</span><span class="rv">Events selected where S&P 500 or TSX experienced abnormal returns exceeding 3% within 5 trading days, cross-referenced with major financial news coverage and published academic event studies.</span></div></div>',unsafe_allow_html=True)
         st.markdown('<div style="height:10px;"></div>',unsafe_allow_html=True)
         ch,ex=st.columns([2,1])
         with ch:

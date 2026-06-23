@@ -56,6 +56,7 @@ The FOMO Score is calculated using Event Study Methodology (MacKinlay, 1997):
 pip install streamlit plotly pandas yfinance
 streamlit run fomo_v4.py
 ```
+**[🚀 Live Dashboard → fomo-index-jhhixyfwhvhrk7vdcgrjcl.streamlit.app](https://fomo-index-jhhixyfwhvhrk7vdcgrjcl.streamlit.app/)**
 
 ## Disclaimer
 
